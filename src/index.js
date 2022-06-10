@@ -11,6 +11,7 @@ const DEBOUNCE_DELAY = 300;
 const refs = {
     searchCountry: document.querySelector('#search-box'),
     countryInfo: document.querySelector('.country-info'),
+    countryList: document.querySelector('.country-list')
 };
 
 refs.searchCountry.addEventListener('input', debounce(onSearchCountry, DEBOUNCE_DELAY));
@@ -19,27 +20,31 @@ function onSearchCountry(e) {
     let inputValue = e.target.value.trim();
 
     if (!inputValue) {
-    return clearMarkup(``);
-  }
+        return clearInfoMarkup(``) || clearListMarkup('');
+    };
 
     fetchCountries(inputValue)
         .then(response => {
             if (response.length > 10) {
-                clearMarkup(``)
+                clearInfoMarkup(``);
+                clearListMarkup('');
                 return Notiflix.Notify.warning('Too many matches found. Please enter a more specific name.');
             } else if (response.length > 1 && response.length < 11) {
+                clearInfoMarkup(``);
                 return renderCountriesListMarkup(response)
             } else {
+                clearListMarkup('');
                 return renderCountryInfoMarkup(response)
             }
         }).catch(() => {
-            clearMarkup(``)
+            clearInfoMarkup(``);
+            clearListMarkup('');
             Notiflix.Notify.failure('Oops, there is no country with that name')
         });
 };
 
 function renderCountriesListMarkup(countries) {
-    refs.countryInfo.innerHTML = '';
+    refs.countryList.innerHTML = '';
     const markup = countries.map(({flags, name}) => {
         return `
         <li class="list">
@@ -48,7 +53,7 @@ function renderCountriesListMarkup(countries) {
         </li>`;
     }).join('');
 
-    refs.countryInfo.innerHTML = markup;
+    refs.countryList.innerHTML = markup;
 };
 
 function renderCountryInfoMarkup(countries) {
@@ -68,6 +73,9 @@ function renderCountryInfoMarkup(countries) {
     refs.countryInfo.innerHTML = markup;
 };
 
-function clearMarkup(markup) {
-  refs.countryInfo.innerHTML = markup;
+function clearInfoMarkup(markup) {
+    refs.countryInfo.innerHTML = markup;
+}
+function clearListMarkup(markup) {
+    refs.countryList.innerHTML = markup;
 }
