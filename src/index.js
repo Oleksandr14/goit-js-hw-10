@@ -25,6 +25,7 @@ function onSearchCountry(e) {
     fetchCountries(inputValue)
         .then(response => {
             if (response.length > 10) {
+                clearMarkup(``)
                 return Notiflix.Notify.warning('Too many matches found. Please enter a more specific name.');
             } else if (response.length > 1 && response.length < 11) {
                 return renderCountriesListMarkup(response)
