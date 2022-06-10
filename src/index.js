@@ -6,15 +6,11 @@ import './css/styles.css';
 
 import { fetchCountries } from './js/fetchCountries';
 
+import {searchCountry, countryInfo, countryList} from './js/refs'
+
 const DEBOUNCE_DELAY = 300;
 
-const refs = {
-    searchCountry: document.querySelector('#search-box'),
-    countryInfo: document.querySelector('.country-info'),
-    countryList: document.querySelector('.country-list')
-};
-
-refs.searchCountry.addEventListener('input', debounce(onSearchCountry, DEBOUNCE_DELAY));
+searchCountry.addEventListener('input', debounce(onSearchCountry, DEBOUNCE_DELAY));
 
 function onSearchCountry(e) {
     let inputValue = e.target.value.trim();
@@ -44,7 +40,7 @@ function onSearchCountry(e) {
 };
 
 function renderCountriesListMarkup(countries) {
-    refs.countryList.innerHTML = '';
+    countryList.innerHTML = '';
     const markup = countries.map(({flags, name}) => {
         return `
         <li class="list">
@@ -53,11 +49,11 @@ function renderCountriesListMarkup(countries) {
         </li>`;
     }).join('');
 
-    refs.countryList.innerHTML = markup;
+    countryList.innerHTML = markup;
 };
 
 function renderCountryInfoMarkup(countries) {
-    refs.countryInfo.innerHTML = '';
+    countryInfo.innerHTML = '';
     const markup = countries.map(({flags, name, capital, population, languages}) => {
         return `
         <div class="country-container">
@@ -70,12 +66,12 @@ function renderCountryInfoMarkup(countries) {
         `
     }).join('');
 
-    refs.countryInfo.innerHTML = markup;
+    countryInfo.innerHTML = markup;
 };
 
 function clearInfoMarkup(markup) {
-    refs.countryInfo.innerHTML = markup;
+    countryInfo.innerHTML = markup;
 }
 function clearListMarkup(markup) {
-    refs.countryList.innerHTML = markup;
+    countryList.innerHTML = markup;
 }
